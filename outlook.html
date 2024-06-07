@@ -10,46 +10,28 @@
   <script src="./ReportMessage.functionFile.min.js"></script>
 
   <script>
-    // Office Initialization
-    Office.initialize = function () {
-      var addr = Office.context.mailbox.userProfile.emailAddress;
-      var host = addr.substring(addr.indexOf('@') + 1, addr.length);
-      _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
-      LoadStrings();
-    };
+   Office.initialize = function () {
+  var addr = Office.context.mailbox.userProfile.emailAddress;
+  var host = addr.substring(addr.indexOf('@') + 1, addr.length);
+  _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
+  LoadStrings();
+  
+  // Call the displayDialog function here
+  displayDialog();
+};
 
-    // Function to invoke the message pop-up
-    function showMessage() {
-      Office.context.mailbox.item.notificationMessages.addAsync('info', {
-        type: 'informationalMessage',
-        message: 'This is a test message by Deven, Thanks'
+// Function to display a dialog box
+function displayDialog() {
+  Office.context.ui.displayDialogAsync("https://ddevb.github.io/Submit.html", { height: 30, width: 20 },
+    (asyncResult) => {
+      const dialog = asyncResult.value;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+        dialog.close();
+        processMessage(arg);
       });
     }
-
-    // Function to add a notification message indicating that an email ID has been submitted
-    function addNotificationMessage() {
-      // Get the notification ID from the input field
-      const id = $("#notificationId").val().toString();
-
-      // Details of the notification message
-      const details = {
-        type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
-        message: "Email ID has been submitted",
-        actions: []
-      };
-
-      // Add the notification message asynchronously
-      Office.context.mailbox.item.notificationMessages.addAsync(id, details, handleResult);
-    }
-
-    // Function to handle the result of adding the notification message
-    function handleResult(asyncResult) {
-      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-        console.error("Failed to add notification message: " + asyncResult.error.message);
-      } else {
-        console.log("Notification message added successfully.");
-      }
-    }
+  );
+}
   </script>
 </head>
 <body>
