@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html> 
+<!DOCTYPE html> 
 <html>
 <head>
   <meta charset="UTF-8" />
@@ -24,6 +24,31 @@
         type: 'informationalMessage',
         message: 'This is a test message by Deven, Thanks'
       });
+    }
+
+    // Function to add a notification message indicating that an email ID has been submitted
+    function addNotificationMessage() {
+      // Get the notification ID from the input field
+      const id = $("#notificationId").val().toString();
+
+      // Details of the notification message
+      const details = {
+        type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
+        message: "Email ID has been submitted",
+        actions: []
+      };
+
+      // Add the notification message asynchronously
+      Office.context.mailbox.item.notificationMessages.addAsync(id, details, handleResult);
+    }
+
+    // Function to handle the result of adding the notification message
+    function handleResult(asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.error("Failed to add notification message: " + asyncResult.error.message);
+      } else {
+        console.log("Notification message added successfully.");
+      }
     }
   </script>
 </head>
