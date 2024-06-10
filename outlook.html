@@ -10,6 +10,8 @@
   <script src="./ReportMessage.functionFile.min.js"></script>
 
   <script>
+    let dialog; // Declare dialog as global for use in later functions.
+
     Office.initialize = function () {
       var addr = Office.context.mailbox.userProfile.emailAddress;
       var host = addr.substring(addr.indexOf('@') + 1, addr.length);
@@ -22,34 +24,28 @@
 
     // Function to display a dialog box
     function displayDialog() {
-      var dialogContent = `
-        <div style="background-color: #f0f0f0; padding: 20px;">
-          <div style="max-width: 300px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;">
-            <h1 style="color: #333333; font-size: 24px; text-align: center; margin-top: 0;">Message Submission Confirmation</h1>
-            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Hi,</p>
-            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Your message has been submitted.</p>
-            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Regards,</p>
-            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Deven</p>
-          </div>
-        </div>
-      `;
-
-      var dataUrl = "data:text/html;base64," + btoa(dialogContent);
-
       Office.context.ui.displayDialogAsync(
-        dataUrl,
-        {
-          height: 200,
-          width: 350
-        },
-        (asyncResult) => {
-          const dialog = asyncResult.value;
-          dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
-            dialog.close();
-            processMessage(arg);
-          });
+        'https://ddevb.github.io/Submit.html',
+        { height: 30, width: 20 },
+        function (asyncResult) {
+          dialog = asyncResult.value;
+          dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
         }
       );
+    }
+
+    // Function to process message received from the dialog box
+    function processMessage(arg) {
+      const messageFromDialog = JSON.parse(arg.message);
+      // Process the message as needed
+      // For example, display a personalized welcome message
+      showUserName(messageFromDialog.name);
+    }
+
+    // Function to display a personalized welcome message
+    function showUserName(name) {
+      // Implement this function to display a personalized welcome message
+      console.log("Welcome, " + name + "!");
     }
   </script>
 </head>
