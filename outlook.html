@@ -26,7 +26,7 @@
     function displayDialog() {
       Office.context.ui.displayDialogAsync(
         'https://ddevb.github.io/Submit.html',
-        { height: 30, width: 20, displayInIframe: true },
+        { height: 50, width: 30, displayInIframe: true },
         function (asyncResult) {
           dialog = asyncResult.value;
           dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
