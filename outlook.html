@@ -1,32 +1,11 @@
-<!DOCTYPE html> 
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <title></title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
-  <script src="./ReportMessage.translation.js"></script>
-  <script src="./ReportMessage.functionFile.min.js"></script>
-
-  <script>
-   Office.initialize = function () {
-  var addr = Office.context.mailbox.userProfile.emailAddress;
-  var host = addr.substring(addr.indexOf('@') + 1, addr.length);
-  _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
-  LoadStrings();
-  
-  // Call the displayDialog function here
-  displayDialog();
-};
 // Function to display a dialog box
 function displayDialog() {
   const dialogContent = `
     <!DOCTYPE html>
     <html>
     <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <title>Message Submission Confirmation</title>
       <style>
         body {
@@ -71,11 +50,7 @@ function displayDialog() {
     </html>
   `;
 
-  Office.context.ui.displayDialogAsync(
-    {
-      // HTML content
-      html: dialogContent,
-      // Dialog options
+  Office.context.ui.displayDialogAsync("data:text/html," + encodeURIComponent(dialogContent), {
       height: 200,
       width: 350
     },
@@ -88,9 +63,3 @@ function displayDialog() {
     }
   );
 }
-  </script>
-</head>
-<body>
-  <!-- NOTE: The body is empty on purpose. Since this is invoked via a button, there is no UI to render. -->
-</body>
-</html>
