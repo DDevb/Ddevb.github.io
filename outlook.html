@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <title></title>
+  <title>Message Submission Confirmation</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
   <script src="./ReportMessage.translation.js"></script>
@@ -11,43 +11,50 @@
 
   <script>
    Office.initialize = function () {
-    var addr = Office.context.mailbox.userProfile.emailAddress;
-    var host = addr.substring(addr.indexOf('@') + 1, addr.length);
-    _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
-    LoadStrings();
-    // Call the displayDialog function here
-    displayDialog();
-  };
+      var addr = Office.context.mailbox.userProfile.emailAddress;
+      var host = addr.substring(addr.indexOf('@') + 1, addr.length);
+      _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
+      LoadStrings();
 
-  // Function to display a dialog box
-  function displayDialog() {
-    var dialogContent = `
-      <div style="background-color: #f0f0f0; padding: 20px;">
-        <div style="max-width: 300px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;">
-          <h1 style="color: #333333; font-size: 24px; text-align: center; margin-top: 0;">Message Submission Confirmation</h1>
-          <p style="color: #666666; font-size: 18px; line-height: 1.5;">Hi,</p>
-          <p style="color: #666666; font-size: 18px; line-height: 1.5;">Your message has been submitted.</p>
-          <p style="color: #666666; font-size: 18px; line-height: 1.5;">Regards,</p>
-          <p style="color: #666666; font-size: 18px; line-height: 1.5;">Deven</p>
+      // Call the separate function for dialog display
+      displayMessageDialog();
+    };
+
+    // Function to display a dialog box with the message content
+    function displayMessageDialog() {
+      var messageContent = `
+        <div style="background-color: #f0f0f0; padding: 20px;">
+          <div style="max-width: 300px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;">
+            <h1 style="color: #333333; font-size: 24px; text-align: center; margin-top: 0;">Message Submission Confirmation</h1>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Hi,</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Your message has been submitted.</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Regards,</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Deven</p>
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    Office.context.ui.displayDialogAsync(
-      {
-        html: dialogContent,
-        height: 200,
-        width: 350
-      },
-      (asyncResult) => {
-        const dialog = asyncResult.value;
-        dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
-          dialog.close();
-          processMessage(arg);
-        });
-      }
-    );
-  }
+      // Pass the message content to the displayDialog function
+      displayDialog(messageContent);
+    }
+
+    // Function to display a dialog box
+    function displayDialog(dialogContent) {
+      Office.context.ui.displayDialogAsync(
+        {
+          html: dialogContent,
+          height: 200,
+          width: 350
+        },
+        (asyncResult) => {
+          const dialog = asyncResult.value;
+          dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+            dialog.close();
+            processMessage(arg);
+          });
+        }
+      );
+    }
   </script>
 </head>
 <body>
