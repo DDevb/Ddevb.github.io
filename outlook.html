@@ -10,78 +10,51 @@
   <script src="./ReportMessage.functionFile.min.js"></script>
 
   <script>
-   Office.initialize = function () {
-  var addr = Office.context.mailbox.userProfile.emailAddress;
-  var host = addr.substring(addr.indexOf('@') + 1, addr.length);
-  _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
-  LoadStrings();
-  
-  // Call the displayDialog function here
-  displayDialog();
-};
+    Office.initialize = function () {
+      var addr = Office.context.mailbox.userProfile.emailAddress;
+      var host = addr.substring(addr.indexOf('@') + 1, addr.length);
+      _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
+      LoadStrings();
+      
+      // Call the displayDialog function here
+      displayDialog();
+    };
 
-// Function to display a dialog box
-function displayDialog() {
-  const dialogContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>Message Submission Confirmation</title>
-      <style>
-        body {
-          background-color: #f0f0f0;
-          font-family: Arial, sans-serif;
-          padding: 20px;
-        }
-        .container {
-          max-width: 300px;
-          margin: 0 auto;
-          background-color: #ffffff;
-          border-radius: 10px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          padding: 20px;
-        }
-        h1 {
-          color: #333333;
-          font-size: 24px;
-          text-align: center;
-          margin-top: 0;
-        }
-        p {
-          color: #666666;
-          font-size: 18px;
-          line-height: 1.5;
-        }
-        .signature {
-          text-align: right;
-          font-style: italic;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>Message Submission Confirmation</h1>
-        <p>Hi,</p>
-        <p>Your message has been submitted.</p>
-        <p>Regards,</p>
-        <p class="signature">Deven</p>
-      </div>
-    </body>
-    </html>
-  `;
+    // Function to display a dialog box
+    function displayDialog() {
+      // Get message data from within the same file
+      var messageContent = `
+        <div style="background-color: #f0f0f0; padding: 20px;">
+          <div style="max-width: 300px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;">
+            <h1 style="color: #333333; font-size: 24px; text-align: center; margin-top: 0;">Message Submission Confirmation</h1>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Hi,</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Your message has been submitted.</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Regards,</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Deven</p>
+          </div>
+        </div>
+      `;
 
-  Office.context.ui.displayDialogAsync("data:text/html," + encodeURIComponent(dialogContent), {
-      height: 200,
-      width: 350
-    },
-    (asyncResult) => {
-      const dialog = asyncResult.value;
-      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
-        dialog.close();
-        processMessage(arg);
-      });
+      Office.context.ui.displayDialogAsync(
+        {
+          // HTML content
+          html: messageContent,
+          // Dialog options
+          height: 200,
+          width: 350
+        },
+        (asyncResult) => {
+          const dialog = asyncResult.value;
+          dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+            dialog.close();
+            processMessage(arg);
+          });
+        }
+      );
     }
-  );
-}
+  </script>
+</head>
+<body>
+  <!-- NOTE: The body is empty on purpose. Since this is invoked via a button, there is no UI to render. -->
+</body>
+</html>
