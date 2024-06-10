@@ -22,13 +22,37 @@
 
 // Function to display a dialog box
 function displayDialog() {
-  Office.context.ui.displayDialogAsync("https://ddevb.github.io/Submit.html", { height: 40, width: 30 },
+  Office.context.ui.displayDialogAsync("", { height: 40, width: 30 },
     (asyncResult) => {
       const dialog = asyncResult.value;
+      const url = "https://ddevb.github.io/Submit.html";
+      const html = '<!DOCTYPE html>' +
+                    '<html>' +
+                    '<head>' +
+                    '<meta charset="UTF-8" />' +
+                    '<meta http-equiv="X-UA-Compatible" content="IE=Edge" />' +
+                    '<title>Dialog Box</title>' +
+                    '<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>' +
+                    '<script>' +
+                    'Office.onReady(() => {' +
+                    '  Office.context.ui.messageParent("Dialog loaded.");' +
+                    '});' +
+                    '</script>' +
+                    '</head>' +
+                    '<body>' +
+                    '<p>This is a dialog box content.</p>' +
+                    '</body>' +
+                    '</html>';
       dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
         dialog.close();
         processMessage(arg);
       });
+      dialog.addEventHandler(Office.EventType.DialogEventReceived, (arg) => {
+        if (arg.error) {
+          console.error(arg.error);
+        }
+      });
+      dialog.messageChild(html);
     }
   );
 }
