@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <title>Message Submission Confirmation</title>
+  <title></title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
   <script src="./ReportMessage.translation.js"></script>
@@ -15,71 +15,30 @@
       var host = addr.substring(addr.indexOf('@') + 1, addr.length);
       _Perf[Stage.Begin] = Date.now() + "_" + addr.hashCode() + "_" + host + "_" + Office.context.mailbox.diagnostics.hostName;
       LoadStrings();
-
-      // Call the separate function for dialog display
+      
+      // Call the displayDialog function here
       displayDialog();
     };
 
     // Function to display a dialog box
     function displayDialog() {
-      var dialogContent = document.createElement('div');
-      dialogContent.style.backgroundColor = '#f0f0f0';
-      dialogContent.style.padding = '20px';
+      var dialogContent = `
+        <div style="background-color: #f0f0f0; padding: 20px;">
+          <div style="max-width: 300px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px;">
+            <h1 style="color: #333333; font-size: 24px; text-align: center; margin-top: 0;">Message Submission Confirmation</h1>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Hi,</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Your message has been submitted.</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Regards,</p>
+            <p style="color: #666666; font-size: 18px; line-height: 1.5;">Deven</p>
+          </div>
+        </div>
+      `;
 
-      var innerDiv = document.createElement('div');
-      innerDiv.style.maxWidth = '300px';
-      innerDiv.style.margin = '0 auto';
-      innerDiv.style.backgroundColor = '#ffffff';
-      innerDiv.style.borderRadius = '10px';
-      innerDiv.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-      innerDiv.style.padding = '20px';
-
-      var title = document.createElement('h1');
-      title.textContent = 'Message Submission Confirmation';
-      title.style.color = '#333333';
-      title.style.fontSize = '24px';
-      title.style.textAlign = 'center';
-      title.style.marginTop = '0';
-
-      var message1 = document.createElement('p');
-      message1.textContent = 'Hi,';
-      message1.style.color = '#666666';
-      message1.style.fontSize = '18px';
-      message1.style.lineHeight = '1.5';
-
-      var message2 = document.createElement('p');
-      message2.textContent = 'Your message has been submitted.';
-      message2.style.color = '#666666';
-      message2.style.fontSize = '18px';
-      message2.style.lineHeight = '1.5';
-
-      var message3 = document.createElement('p');
-      message3.textContent = 'Regards,';
-      message3.style.color = '#666666';
-      message3.style.fontSize = '18px';
-      message3.style.lineHeight = '1.5';
-
-      var signature = document.createElement('p');
-      signature.textContent = 'Deven';
-      signature.style.color = '#666666';
-      signature.style.fontSize = '18px';
-      signature.style.lineHeight = '1.5';
-      signature.style.textAlign = 'right';
-      signature.style.fontStyle = 'italic';
-
-      innerDiv.appendChild(title);
-      innerDiv.appendChild(message1);
-      innerDiv.appendChild(message2);
-      innerDiv.appendChild(message3);
-      innerDiv.appendChild(signature);
-
-      dialogContent.appendChild(innerDiv);
+      var dataUrl = "data:text/html;base64," + btoa(dialogContent);
 
       Office.context.ui.displayDialogAsync(
+        dataUrl,
         {
-          // HTML content
-          html: dialogContent.innerHTML,
-          // Dialog options
           height: 200,
           width: 350
         },
