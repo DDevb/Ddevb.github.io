@@ -22,7 +22,7 @@
 
 // Function to display a dialog box
 function displayDialog() {
-  Office.context.ui.displayDialogAsync("https://ddevb.github.io/Submit.html", { height: 30, width: 20 },
+  Office.context.ui.displayDialogAsync("https://ddevb.github.io/Submit.html", { height: 40, width: 30 },
     (asyncResult) => {
       const dialog = asyncResult.value;
       dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
